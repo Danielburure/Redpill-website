@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useAuth } from '../contexts/AuthContext';
 import { useBlogPosts } from '../hooks/useBlogPosts';
-import { PlusCircle, Edit, Trash2, LogOut, BarChart3 } from "lucide-react";
+import { PlusCircle, Edit, Trash2, LogOut, BarChart3, Heart, Video } from "lucide-react";
 import { toast } from 'sonner';
 
 const AdminDashboard = () => {
