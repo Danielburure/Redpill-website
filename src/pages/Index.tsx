@@ -77,32 +77,27 @@ const Index = () => {
             </CardContent>
           </Card>
 
-          {/* Main Content Area - Two Column Layout */}
-          <div className="w-full max-w-7xl flex gap-8">
-            {/* Posts Section - Left Side */}
-            <div className="flex-1">
-              <div className="space-y-6">
-                {filteredPosts.map((post) => (
-                  <PostCard
-                    key={post.id}
-                    post={post}
-                    onReaction={(emoji) => addReaction(post.id, emoji)}
-                  />
-                ))}
+          {/* Posts Grid - Horizontal Layout */}
+          <div className="w-full max-w-4xl">
+            <div className="space-y-6">
+              {filteredPosts.map((post) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onReaction={(emoji) => addReaction(post.id, emoji)}
+                />
+              ))}
+            </div>
+
+            {filteredPosts.length === 0 && (
+              <div className="text-center py-16">
+                <p className="text-white/80 text-xl dark:text-gray-300">No posts found matching your search.</p>
               </div>
-
-              {filteredPosts.length === 0 && (
-                <div className="text-center py-16">
-                  <p className="text-white/80 text-xl dark:text-gray-300">No posts found matching your search.</p>
-                </div>
-              )}
-            </div>
-
-            {/* Comment Section - Right Side */}
-            <div className="w-96">
-              <CommentSection />
-            </div>
+            )}
           </div>
+
+          {/* Comment Section */}
+          <CommentSection />
         </div>
       </div>
       
