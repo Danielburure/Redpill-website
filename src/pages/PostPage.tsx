@@ -17,9 +17,9 @@ const PostPage = () => {
         <Card className="bg-white/10 backdrop-blur-lg border-white/20">
           <CardContent className="p-8 text-center">
             <h2 className="text-2xl font-bold text-white mb-4">Post not found</h2>
-            <Link to="/blog">
+            <Link to="/">
               <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white">
-                Back to Blog
+                Back to Home
               </Button>
             </Link>
           </CardContent>
@@ -45,10 +45,10 @@ const PostPage = () => {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="mb-8">
-          <Link to="/blog">
+          <Link to="/">
             <Button variant="ghost" className="text-white hover:bg-white/10 mb-6">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Blog
+              Back to Home
             </Button>
           </Link>
         </div>
