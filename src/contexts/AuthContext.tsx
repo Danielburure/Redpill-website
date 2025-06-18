@@ -19,7 +19,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = (password: string) => {
     // Simple password check - replace with Supabase auth later
-    if (password === 'admin123') {
+    if (password === '20407093') {
       setIsAuthenticated(true);
       localStorage.setItem('admin_authenticated', 'true');
       return true;
