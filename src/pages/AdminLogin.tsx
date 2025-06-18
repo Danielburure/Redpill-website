@@ -26,7 +26,7 @@ const AdminLogin = () => {
       toast.success('Welcome back, Admin!');
       navigate('/admin/dashboard');
     } else {
-      toast.error('Invalid password. Try "admin123" for demo.');
+      toast.error('Invalid password. Kindly logout you are not allowed in this page.');
     }
 
     setIsLoading(false);
@@ -71,7 +71,7 @@ const AdminLogin = () => {
             </form>
             <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/10">
               <p className="text-white/60 text-sm">
-                <strong>Demo Password:</strong> admin123
+                <strong>This is admin's page kindly return back</strong> 
               </p>
             </div>
           </CardContent>
