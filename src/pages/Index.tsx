@@ -59,7 +59,7 @@ const Index = () => {
           
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-4xl mx-auto text-center leading-relaxed dark:text-gray-200">
-            Join me as I unfold the secrets that the mainstream media has conditioned us to believe in
+            Join me as I unveil the deceptions and awaken you to a new reality
           </p>
 
           {/* Search Bar */}
