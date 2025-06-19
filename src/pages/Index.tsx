@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Search, Moon, Sun } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useBlogPosts } from '../hooks/useBlogPosts';
@@ -96,8 +97,15 @@ const Index = () => {
             )}
           </div>
 
-          {/* Comment Section */}
-          <CommentSection />
+          {/* Separator Line */}
+          <div className="w-full max-w-4xl my-12">
+            <Separator className="bg-white/20 dark:bg-gray-700/20" />
+          </div>
+
+          {/* Comment Section - Bottom Left */}
+          <div className="w-full max-w-4xl self-start">
+            <CommentSection />
+          </div>
         </div>
       </div>
       
