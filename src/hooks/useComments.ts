@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface Comment {
   id: string;
@@ -11,27 +12,46 @@ export interface Comment {
 export const useComments = () => {
   const [comments, setComments] = useState<Comment[]>([]);
 
-  useEffect(() => {
-    const savedComments = localStorage.getItem('blog_comments');
-    if (savedComments) {
-      setComments(JSON.parse(savedComments));
-    }
-  }, []);
+  const fetchComments = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('comments')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-  const saveComments = (newComments: Comment[]) => {
-    setComments(newComments);
-    localStorage.setItem('blog_comments', JSON.stringify(newComments));
+      if (error) throw error;
+
+      const formattedComments = data.map(comment => ({
+        id: comment.id,
+        name: comment.name,
+        comment: comment.comment,
+        timestamp: comment.created_at
+      }));
+
+      setComments(formattedComments);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+    }
   };
 
-  const addComment = (name: string, comment: string) => {
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      name,
-      comment,
-      timestamp: new Date().toISOString()
-    };
-    const newComments = [newComment, ...comments];
-    saveComments(newComments);
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
+  const addComment = async (name: string, comment: string) => {
+    try {
+      const { error } = await supabase
+        .from('comments')
+        .insert({
+          name: name,
+          comment: comment
+        });
+
+      if (error) throw error;
+      await fetchComments();
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
   };
 
   return {

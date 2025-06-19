@@ -1,11 +1,13 @@
 
 import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface BlogPost {
   id: string;
   title: string;
   content: string;
   videoUrl?: string;
+  imageUrl?: string;
   timestamp: string;
   reactions: { [emoji: string]: number };
 }
@@ -13,77 +15,140 @@ export interface BlogPost {
 export const useBlogPosts = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
 
-  useEffect(() => {
-    const savedPosts = localStorage.getItem('blog_posts');
-    if (savedPosts) {
-      setPosts(JSON.parse(savedPosts));
-    } else {
-      // Demo posts
-      const demoPosts: BlogPost[] = [
-        {
-          id: '1',
-          title: 'Welcome to My Secret Blog',
-          content: 'This is my very first secret blog post! I\'m excited to share my thoughts and experiences with you through this beautiful platform.',
-          videoUrl: 'https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4',
-          timestamp: new Date('2024-06-15').toISOString(),
-          reactions: { '👍': 5, '❤️': 3, '🔥': 2 }
-        },
-        {
-          id: '2',
-          title: 'Amazing Gradient Designs',
-          content: 'Today I want to talk about the beauty of gradient designs in modern web development. The way colors blend together creates such mesmerizing effects!',
-          timestamp: new Date('2024-06-16').toISOString(),
-          reactions: { '😍': 8, '🎨': 4, '✨': 6 }
-        }
-      ];
-      setPosts(demoPosts);
-      localStorage.setItem('blog_posts', JSON.stringify(demoPosts));
+  const fetchPosts = async () => {
+    try {
+      // Fetch posts
+      const { data: postsData, error: postsError } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (postsError) throw postsError;
+
+      // Fetch reactions
+      const { data: reactionsData, error: reactionsError } = await supabase
+        .from('post_reactions')
+        .select('*');
+
+      if (reactionsError) throw reactionsError;
+
+      // Combine posts with reactions
+      const postsWithReactions = postsData.map(post => {
+        const postReactions = reactionsData.filter(r => r.post_id === post.id);
+        const reactions: { [emoji: string]: number } = {};
+        
+        postReactions.forEach(reaction => {
+          reactions[reaction.emoji] = reaction.count;
+        });
+
+        return {
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          videoUrl: post.video_url,
+          imageUrl: post.image_url,
+          timestamp: post.created_at,
+          reactions
+        };
+      });
+
+      setPosts(postsWithReactions);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
     }
+  };
+
+  useEffect(() => {
+    fetchPosts();
   }, []);
 
-  const savePosts = (newPosts: BlogPost[]) => {
-    setPosts(newPosts);
-    localStorage.setItem('blog_posts', JSON.stringify(newPosts));
+  const addPost = async (post: Omit<BlogPost, 'id' | 'timestamp' | 'reactions'>) => {
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .insert({
+          title: post.title,
+          content: post.content,
+          video_url: post.videoUrl,
+          image_url: post.imageUrl
+        });
+
+      if (error) throw error;
+      await fetchPosts();
+    } catch (error) {
+      console.error('Error adding post:', error);
+    }
   };
 
-  const addPost = (post: Omit<BlogPost, 'id' | 'timestamp' | 'reactions'>) => {
-    const newPost: BlogPost = {
-      ...post,
-      id: Date.now().toString(),
-      timestamp: new Date().toISOString(),
-      reactions: {}
-    };
-    const newPosts = [newPost, ...posts];
-    savePosts(newPosts);
+  const updatePost = async (id: string, updates: Partial<BlogPost>) => {
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .update({
+          title: updates.title,
+          content: updates.content,
+          video_url: updates.videoUrl,
+          image_url: updates.imageUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchPosts();
+    } catch (error) {
+      console.error('Error updating post:', error);
+    }
   };
 
-  const updatePost = (id: string, updates: Partial<BlogPost>) => {
-    const newPosts = posts.map(post => 
-      post.id === id ? { ...post, ...updates } : post
-    );
-    savePosts(newPosts);
+  const deletePost = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchPosts();
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
   };
 
-  const deletePost = (id: string) => {
-    const newPosts = posts.filter(post => post.id !== id);
-    savePosts(newPosts);
-  };
+  const addReaction = async (postId: string, emoji: string) => {
+    try {
+      // Check if reaction exists
+      const { data: existingReaction } = await supabase
+        .from('post_reactions')
+        .select('*')
+        .eq('post_id', postId)
+        .eq('emoji', emoji)
+        .single();
 
-  const addReaction = (postId: string, emoji: string) => {
-    const newPosts = posts.map(post => {
-      if (post.id === postId) {
-        const currentCount = post.reactions[emoji] || 0;
-        return {
-          ...post,
-          reactions: {
-            ...post.reactions,
-            [emoji]: currentCount + 1
-          }
-        };
+      if (existingReaction) {
+        // Update existing reaction
+        const { error } = await supabase
+          .from('post_reactions')
+          .update({ count: existingReaction.count + 1 })
+          .eq('id', existingReaction.id);
+
+        if (error) throw error;
+      } else {
+        // Create new reaction
+        const { error } = await supabase
+          .from('post_reactions')
+          .insert({
+            post_id: postId,
+            emoji: emoji,
+            count: 1
+          });
+
+        if (error) throw error;
       }
-      return post;
-    });
-    savePosts(newPosts);
+
+      await fetchPosts();
+    } catch (error) {
+      console.error('Error adding reaction:', error);
+    }
   };
 
   return {

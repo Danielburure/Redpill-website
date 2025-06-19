@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { BlogPost } from '../hooks/useBlogPosts';
-import { Video, Heart } from "lucide-react";
+import { Video, Heart, Image } from "lucide-react";
 
 interface PostCardProps {
   post: BlogPost;
@@ -31,6 +31,21 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
   return (
     <Card className="bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl group dark:bg-gray-800/10 dark:border-gray-700/20 dark:hover:bg-gray-700/20 w-full mb-6">
       <CardContent className="p-6">
+        {/* Image Display */}
+        {post.imageUrl && (
+          <div className="relative mb-4 overflow-hidden rounded-lg">
+            <img 
+              src={post.imageUrl} 
+              alt={post.title}
+              className="w-full h-48 object-cover rounded-lg border-2 border-gradient-to-r from-pink-400 to-violet-500"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+          </div>
+        )}
+
         {/* Video Thumbnail */}
         {post.videoUrl && (
           <div className="relative mb-4 overflow-hidden rounded-lg border-4 border-gradient-to-r from-pink-400 to-violet-500 p-1">

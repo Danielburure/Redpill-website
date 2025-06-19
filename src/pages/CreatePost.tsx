@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Upload } from "lucide-react";
+import { ArrowLeft, Upload, Image } from "lucide-react";
 import { useBlogPosts } from '../hooks/useBlogPosts';
 import { toast } from 'sonner';
 
@@ -13,6 +13,7 @@ const CreatePost = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { addPost } = useBlogPosts();
   const navigate = useNavigate();
@@ -26,17 +27,22 @@ const CreatePost = () => {
 
     setIsLoading(true);
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      await addPost({
+        title: title.trim(),
+        content: content.trim(),
+        videoUrl: videoUrl.trim() || undefined,
+        imageUrl: imageUrl.trim() || undefined
+      });
 
-    addPost({
-      title: title.trim(),
-      content: content.trim(),
-      videoUrl: videoUrl.trim() || undefined
-    });
-
-    toast.success('Post created successfully!');
-    navigate('/admin/dashboard');
+      toast.success('Post created successfully!');
+      navigate('/admin/dashboard');
+    } catch (error) {
+      toast.error('Failed to create post');
+      console.error('Error creating post:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -91,6 +97,22 @@ const CreatePost = () => {
                 />
               </div>
 
+              {/* Image URL */}
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Image URL (Optional)
+                </label>
+                <Input
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
+                />
+                <p className="text-white/60 text-sm mt-1">
+                  Add an image to make your post more engaging
+                </p>
+              </div>
+
               {/* Video URL */}
               <div>
                 <label className="block text-white text-sm font-medium mb-2">
@@ -126,20 +148,36 @@ const CreatePost = () => {
           </CardContent>
         </Card>
 
-        {/* Info Card */}
-        <Card className="mt-8 bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-lg border-blue-500/20">
-          <CardContent className="p-6">
-            <div className="flex items-center">
-              <Upload className="h-6 w-6 text-blue-400 mr-3" />
-              <div>
-                <h3 className="text-white font-semibold">Need video uploads?</h3>
-                <p className="text-white/60 text-sm">
-                  Connect to Supabase for secure file storage and video hosting capabilities.
-                </p>
+        {/* Info Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mt-8">
+          <Card className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-lg border-blue-500/20">
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <Image className="h-6 w-6 text-blue-400 mr-3" />
+                <div>
+                  <h3 className="text-white font-semibold">Image Support</h3>
+                  <p className="text-white/60 text-sm">
+                    Add images to make your posts more visually appealing and engaging.
+                  </p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 backdrop-blur-lg border-green-500/20">
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <Upload className="h-6 w-6 text-green-400 mr-3" />
+                <div>
+                  <h3 className="text-white font-semibold">File Uploads</h3>
+                  <p className="text-white/60 text-sm">
+                    Connect to Supabase for secure file storage and media hosting.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
