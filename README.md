@@ -9,4 +9,4 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
-for database i have used supabase
+-for database i have used supabase
