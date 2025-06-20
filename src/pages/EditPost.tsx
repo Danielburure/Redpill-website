@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { useBlogPosts } from '../hooks/useBlogPosts';
 import { toast } from 'sonner';
+import FileUpload from '../components/FileUpload';
 
 const EditPost = () => {
   const { id } = useParams();
@@ -17,6 +18,7 @@ const EditPost = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const post = posts.find(p => p.id === id);
@@ -26,6 +28,7 @@ const EditPost = () => {
       setTitle(post.title);
       setContent(post.content);
       setVideoUrl(post.videoUrl || '');
+      setImageUrl(post.imageUrl || '');
     }
   }, [post]);
 
@@ -55,17 +58,22 @@ const EditPost = () => {
 
     setIsLoading(true);
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      await updatePost(post.id, {
+        title: title.trim(),
+        content: content.trim(),
+        videoUrl: videoUrl.trim() || undefined,
+        imageUrl: imageUrl.trim() || undefined
+      });
 
-    updatePost(post.id, {
-      title: title.trim(),
-      content: content.trim(),
-      videoUrl: videoUrl.trim() || undefined
-    });
-
-    toast.success('Post updated successfully!');
-    navigate('/admin/dashboard');
+      toast.success('Post updated successfully!');
+      navigate('/admin/dashboard');
+    } catch (error) {
+      toast.error('Failed to update post');
+      console.error('Error updating post:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -120,17 +128,46 @@ const EditPost = () => {
                 />
               </div>
 
-              {/* Video URL */}
+              {/* Image Upload */}
               <div>
                 <label className="block text-white text-sm font-medium mb-2">
-                  Video URL (Optional)
+                  Image (Optional)
                 </label>
-                <Input
-                  value={videoUrl}
-                  onChange={(e) => setVideoUrl(e.target.value)}
-                  placeholder="https://example.com/video.mp4"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
-                />
+                <div className="space-y-4">
+                  <FileUpload
+                    type="image"
+                    onUpload={setImageUrl}
+                    currentUrl={imageUrl}
+                  />
+                  <div className="text-center text-white/60">OR</div>
+                  <Input
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="Or paste image URL..."
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
+                  />
+                </div>
+              </div>
+
+              {/* Video Upload */}
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Video (Optional)
+                </label>
+                <div className="space-y-4">
+                  <FileUpload
+                    type="video"
+                    onUpload={setVideoUrl}
+                    currentUrl={videoUrl}
+                  />
+                  <div className="text-center text-white/60">OR</div>
+                  <Input
+                    value={videoUrl}
+                    onChange={(e) => setVideoUrl(e.target.value)}
+                    placeholder="Or paste video URL..."
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
+                  />
+                </div>
               </div>
 
               {/* Submit Button */}

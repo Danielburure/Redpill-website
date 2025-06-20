@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Upload, Image } from "lucide-react";
 import { useBlogPosts } from '../hooks/useBlogPosts';
 import { toast } from 'sonner';
+import FileUpload from '../components/FileUpload';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
@@ -97,36 +98,46 @@ const CreatePost = () => {
                 />
               </div>
 
-              {/* Image URL */}
+              {/* Image Upload */}
               <div>
                 <label className="block text-white text-sm font-medium mb-2">
-                  Image URL (Optional)
+                  Image (Optional)
                 </label>
-                <Input
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
-                />
-                <p className="text-white/60 text-sm mt-1">
-                  Add an image to make your post more engaging
-                </p>
+                <div className="space-y-4">
+                  <FileUpload
+                    type="image"
+                    onUpload={setImageUrl}
+                    currentUrl={imageUrl}
+                  />
+                  <div className="text-center text-white/60">OR</div>
+                  <Input
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    placeholder="Or paste image URL..."
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
+                  />
+                </div>
               </div>
 
-              {/* Video URL */}
+              {/* Video Upload */}
               <div>
                 <label className="block text-white text-sm font-medium mb-2">
-                  Video URL (Optional)
+                  Video (Optional)
                 </label>
-                <Input
-                  value={videoUrl}
-                  onChange={(e) => setVideoUrl(e.target.value)}
-                  placeholder="https://example.com/video.mp4"
-                  className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
-                />
-                <p className="text-white/60 text-sm mt-1">
-                  Note: Connect to Supabase for secure video file uploads
-                </p>
+                <div className="space-y-4">
+                  <FileUpload
+                    type="video"
+                    onUpload={setVideoUrl}
+                    currentUrl={videoUrl}
+                  />
+                  <div className="text-center text-white/60">OR</div>
+                  <Input
+                    value={videoUrl}
+                    onChange={(e) => setVideoUrl(e.target.value)}
+                    placeholder="Or paste video URL..."
+                    className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
+                  />
+                </div>
               </div>
 
               {/* Submit Button */}
@@ -157,7 +168,7 @@ const CreatePost = () => {
                 <div>
                   <h3 className="text-white font-semibold">Image Support</h3>
                   <p className="text-white/60 text-sm">
-                    Add images to make your posts more visually appealing and engaging.
+                    Upload images directly to Supabase Storage for secure, fast loading.
                   </p>
                 </div>
               </div>
@@ -169,9 +180,9 @@ const CreatePost = () => {
               <div className="flex items-center">
                 <Upload className="h-6 w-6 text-green-400 mr-3" />
                 <div>
-                  <h3 className="text-white font-semibold">File Uploads</h3>
+                  <h3 className="text-white font-semibold">Video Uploads</h3>
                   <p className="text-white/60 text-sm">
-                    Connect to Supabase for secure file storage and media hosting.
+                    Upload videos directly to Supabase Storage with automatic optimization.
                   </p>
                 </div>
               </div>

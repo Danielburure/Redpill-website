@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { BlogPost } from '../hooks/useBlogPosts';
-import { Video, Heart, Image } from "lucide-react";
+import { Heart, Play } from "lucide-react";
 
 interface PostCardProps {
   post: BlogPost;
@@ -46,13 +46,19 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
           </div>
         )}
 
-        {/* Video Thumbnail */}
+        {/* Video Display */}
         {post.videoUrl && (
-          <div className="relative mb-4 overflow-hidden rounded-lg border-4 border-gradient-to-r from-pink-400 to-violet-500 p-1">
-            <div className="bg-gradient-to-r from-pink-400 to-violet-500 rounded-lg p-4 text-center">
-              <Video className="h-12 w-12 text-white mx-auto mb-2" />
-              <p className="text-white text-sm">Video Content</p>
-            </div>
+          <div className="relative mb-4 overflow-hidden rounded-lg">
+            <video 
+              className="w-full h-48 object-cover rounded-lg border-2 border-gradient-to-r from-pink-400 to-violet-500"
+              controls
+              preload="metadata"
+            >
+              <source src={post.videoUrl} type="video/mp4" />
+              <source src={post.videoUrl} type="video/webm" />
+              <source src={post.videoUrl} type="video/ogg" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         )}
 

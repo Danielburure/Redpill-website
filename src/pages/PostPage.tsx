@@ -2,7 +2,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Video } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useBlogPosts } from '../hooks/useBlogPosts';
 
 const PostPage = () => {
@@ -64,16 +64,30 @@ const PostPage = () => {
             {/* Date */}
             <p className="text-white/60 text-lg mb-8">{formatDate(post.timestamp)}</p>
 
+            {/* Image */}
+            {post.imageUrl && (
+              <div className="mb-8">
+                <img 
+                  src={post.imageUrl} 
+                  alt={post.title}
+                  className="w-full max-h-96 object-cover rounded-xl border-4 border-gradient-to-r from-pink-400 to-violet-500"
+                />
+              </div>
+            )}
+
             {/* Video */}
             {post.videoUrl && (
               <div className="mb-8">
-                <div className="relative overflow-hidden rounded-xl border-4 border-gradient-to-r from-pink-400 to-violet-500 p-2 bg-gradient-to-r from-pink-400 to-violet-500">
-                  <div className="bg-black rounded-lg p-8 text-center">
-                    <Video className="h-16 w-16 text-white mx-auto mb-4" />
-                    <p className="text-white text-lg">Video Player</p>
-                    <p className="text-white/60 text-sm mt-2">Video content would be embedded here</p>
-                  </div>
-                </div>
+                <video 
+                  className="w-full max-h-96 object-cover rounded-xl border-4 border-gradient-to-r from-pink-400 to-violet-500"
+                  controls
+                  preload="metadata"
+                >
+                  <source src={post.videoUrl} type="video/mp4" />
+                  <source src={post.videoUrl} type="video/webm" />
+                  <source src={post.videoUrl} type="video/ogg" />
+                  Your browser does not support the video tag.
+                </video>
               </div>
             )}
 
