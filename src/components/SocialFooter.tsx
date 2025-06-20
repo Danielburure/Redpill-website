@@ -10,7 +10,7 @@ const SocialFooter = () => {
           <h3 className="text-2xl font-bold text-white dark:text-gray-100 mb-6">Contact Me</h3>
           <div className="flex justify-center space-x-8">
             <a 
-              href="https://twitter.com" 
+              href="https://x.com/itsDummy4" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-white hover:text-cyan-400 transition-colors"
@@ -19,12 +19,12 @@ const SocialFooter = () => {
                 <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
                   <span className="text-xl">𝕏</span>
                 </div>
-                <span className="text-sm">Twitter</span>
+                <span className="text-sm">x</span>
               </div>
             </a>
             
             <a 
-              href="https://instagram.com" 
+              href="https://instagram.com/khid_.asahd" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-white hover:text-pink-400 transition-colors"
@@ -38,7 +38,7 @@ const SocialFooter = () => {
             </a>
             
             <a 
-              href="https://whatsapp.com" 
+              href="https://wa.me/254720485988" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-white hover:text-green-400 transition-colors"
@@ -52,7 +52,7 @@ const SocialFooter = () => {
             </a>
             
             <a 
-              href="https://github.com" 
+              href="https://github.com/Danielburure" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-white hover:text-gray-400 transition-colors"
