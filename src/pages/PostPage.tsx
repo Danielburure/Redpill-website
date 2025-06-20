@@ -1,16 +1,125 @@
 
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
-import { useBlogPosts } from '../hooks/useBlogPosts';
+import { supabase } from '@/integrations/supabase/client';
+import { BlogPost } from '../hooks/useBlogPosts';
 import ShareButton from '../components/ShareButton';
 
 const PostPage = () => {
   const { id } = useParams();
-  const { posts, addReaction } = useBlogPosts();
-  
-  const post = posts.find(p => p.id === id);
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      if (!id) return;
+      
+      try {
+        // Fetch the specific post
+        const { data: postData, error: postError } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (postError) throw postError;
+
+        // Fetch reactions for this post
+        const { data: reactionsData, error: reactionsError } = await supabase
+          .from('post_reactions')
+          .select('*')
+          .eq('post_id', id);
+
+        if (reactionsError) throw reactionsError;
+
+        // Combine post with reactions
+        const reactions: { [emoji: string]: number } = {};
+        reactionsData.forEach(reaction => {
+          reactions[reaction.emoji] = reaction.count;
+        });
+
+        const postWithReactions: BlogPost = {
+          id: postData.id,
+          title: postData.title,
+          content: postData.content,
+          videoUrl: postData.video_url,
+          imageUrl: postData.image_url,
+          timestamp: postData.created_at,
+          reactions
+        };
+
+        setPost(postWithReactions);
+      } catch (error) {
+        console.error('Error fetching post:', error);
+        setPost(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPost();
+  }, [id]);
+
+  const addReaction = async (emoji: string) => {
+    if (!post) return;
+
+    try {
+      // Check if reaction exists
+      const { data: existingReaction } = await supabase
+        .from('post_reactions')
+        .select('*')
+        .eq('post_id', post.id)
+        .eq('emoji', emoji)
+        .single();
+
+      if (existingReaction) {
+        // Update existing reaction
+        const { error } = await supabase
+          .from('post_reactions')
+          .update({ count: existingReaction.count + 1 })
+          .eq('id', existingReaction.id);
+
+        if (error) throw error;
+      } else {
+        // Create new reaction
+        const { error } = await supabase
+          .from('post_reactions')
+          .insert({
+            post_id: post.id,
+            emoji: emoji,
+            count: 1
+          });
+
+        if (error) throw error;
+      }
+
+      // Update local state
+      setPost({
+        ...post,
+        reactions: {
+          ...post.reactions,
+          [emoji]: (post.reactions[emoji] || 0) + 1
+        }
+      });
+    } catch (error) {
+      console.error('Error adding reaction:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center">
+        <Card className="bg-white/10 backdrop-blur-lg border-white/20">
+          <CardContent className="p-8 text-center">
+            <h2 className="text-2xl font-bold text-white mb-4">Loading...</h2>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (!post) {
     return (
@@ -111,7 +220,7 @@ const PostPage = () => {
                     key={emoji}
                     variant="outline"
                     size="lg"
-                    onClick={() => addReaction(post.id, emoji)}
+                    onClick={() => addReaction(emoji)}
                     className="border-white/30 text-white hover:bg-white/20 text-2xl p-4 h-auto"
                   >
                     {emoji}
