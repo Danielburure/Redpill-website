@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { useBlogPosts } from '../hooks/useBlogPosts';
+import ShareButton from '../components/ShareButton';
 
 const PostPage = () => {
   const { id } = useParams();
@@ -56,10 +57,13 @@ const PostPage = () => {
         {/* Post Content */}
         <Card className="bg-white/10 backdrop-blur-lg border-white/20">
           <CardContent className="p-8">
-            {/* Title */}
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
-              {post.title}
-            </h1>
+            {/* Title and Share Button */}
+            <div className="flex justify-between items-start mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-white bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent flex-1 mr-4">
+                {post.title}
+              </h1>
+              <ShareButton postId={post.id} postTitle={post.title} />
+            </div>
 
             {/* Date */}
             <p className="text-white/60 text-lg mb-8">{formatDate(post.timestamp)}</p>

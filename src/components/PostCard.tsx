@@ -4,7 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { BlogPost } from '../hooks/useBlogPosts';
-import { Heart, Play } from "lucide-react";
+import { Heart } from "lucide-react";
+import ShareButton from './ShareButton';
 
 interface PostCardProps {
   post: BlogPost;
@@ -62,10 +63,13 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
           </div>
         )}
 
-        {/* Title */}
-        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-yellow-300 transition-colors dark:text-gray-100 dark:group-hover:text-yellow-300">
-          {post.title}
-        </h3>
+        {/* Header with Title and Share Button */}
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors dark:text-gray-100 dark:group-hover:text-yellow-300 flex-1 mr-2">
+            {post.title}
+          </h3>
+          <ShareButton postId={post.id} postTitle={post.title} />
+        </div>
 
         {/* Date */}
         <p className="text-white/60 text-sm mb-3 dark:text-gray-400">{formatDate(post.timestamp)}</p>
