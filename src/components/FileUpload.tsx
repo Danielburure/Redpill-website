@@ -28,6 +28,16 @@ const FileUpload: React.FC<FileUploadProps> = ({ type, onUpload, onRemove, curre
     }
   };
 
+  const handleRemove = () => {
+    if (onRemove) {
+      onRemove();
+    }
+    // Clear the file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   const acceptedTypes = type === 'image' 
     ? 'image/jpeg,image/png,image/gif,image/webp'
     : 'video/mp4,video/webm,video/ogg';
@@ -57,7 +67,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ type, onUpload, onRemove, curre
         {currentUrl && onRemove && (
           <Button
             type="button"
-            onClick={onRemove}
+            onClick={handleRemove}
             variant="outline"
             className="border-red-500/50 text-red-400 hover:bg-red-500/20 hover:border-red-500"
           >
@@ -67,9 +77,11 @@ const FileUpload: React.FC<FileUploadProps> = ({ type, onUpload, onRemove, curre
       </div>
 
       {currentUrl && (
-        <p className="text-white/60 text-sm">
-          {type === 'image' ? 'Image' : 'Video'} uploaded successfully
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-white/60 text-sm">
+            {type === 'image' ? 'Image' : 'Video'} uploaded successfully
+          </p>
+        </div>
       )}
     </div>
   );
