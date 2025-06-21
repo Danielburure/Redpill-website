@@ -49,39 +49,42 @@ const ShareButton: React.FC<ShareButtonProps> = ({ postId, postTitle }) => {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-white/60 hover:text-white hover:bg-white/10 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-700/20"
-        >
-          <Share className="w-4 h-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-48 bg-white/90 backdrop-blur-lg border-white/20 dark:bg-gray-800/90 dark:border-gray-700/20">
-        <DropdownMenuItem onClick={copyToClipboard} className="cursor-pointer">
-          {copied ? (
-            <Check className="w-4 h-4 mr-2 text-green-500" />
-          ) : (
-            <Copy className="w-4 h-4 mr-2" />
-          )}
-          {copied ? "Copied!" : "Copy link"}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={shareToTwitter} className="cursor-pointer">
-          <span className="w-4 h-4 mr-2 text-black">𝕏</span>
-          Share to X (Twitter)
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={shareToWhatsApp} className="cursor-pointer">
-          <span className="w-4 h-4 mr-2 text-green-600">📱</span>
-          Share to WhatsApp
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={shareToFacebook} className="cursor-pointer">
-          <span className="w-4 h-4 mr-2 text-blue-600">📘</span>
-          Share to Facebook
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="flex flex-col items-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-white/60 hover:text-white hover:bg-white/10 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-700/20"
+          >
+            <Share className="w-4 h-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-48 bg-white/90 backdrop-blur-lg border-white/20 dark:bg-gray-800/90 dark:border-gray-700/20">
+          <DropdownMenuItem onClick={copyToClipboard} className="cursor-pointer">
+            {copied ? (
+              <Check className="w-4 h-4 mr-2 text-green-500" />
+            ) : (
+              <Copy className="w-4 h-4 mr-2" />
+            )}
+            {copied ? "Copied!" : "Copy link"}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={shareToTwitter} className="cursor-pointer">
+            <span className="w-4 h-4 mr-2 text-black">𝕏</span>
+            Share to X (Twitter)
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={shareToWhatsApp} className="cursor-pointer">
+            <span className="w-4 h-4 mr-2 text-green-600">📱</span>
+            Share to WhatsApp
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={shareToFacebook} className="cursor-pointer">
+            <span className="w-4 h-4 mr-2 text-blue-600">📘</span>
+            Share to Facebook
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <span className="text-xs text-white/60 dark:text-gray-400 mt-1">Share</span>
+    </div>
   );
 };
 

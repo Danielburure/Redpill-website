@@ -1,16 +1,17 @@
 
 import { useRef } from 'react';
 import { Button } from "@/components/ui/button";
-import { Upload, Image, Video } from "lucide-react";
+import { Upload, Image, Video, X } from "lucide-react";
 import { useFileUpload } from '../hooks/useFileUpload';
 
 interface FileUploadProps {
   type: 'image' | 'video';
   onUpload: (url: string) => void;
+  onRemove?: () => void;
   currentUrl?: string;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ type, onUpload, currentUrl }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ type, onUpload, onRemove, currentUrl }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { uploadFile, uploading } = useFileUpload();
 
@@ -41,16 +42,29 @@ const FileUpload: React.FC<FileUploadProps> = ({ type, onUpload, currentUrl }) =
         className="hidden"
       />
       
-      <Button
-        type="button"
-        onClick={() => fileInputRef.current?.click()}
-        disabled={uploading}
-        variant="outline"
-        className="border-white/20 text-white hover:bg-white/10"
-      >
-        {type === 'image' ? <Image className="mr-2 h-4 w-4" /> : <Video className="mr-2 h-4 w-4" />}
-        {uploading ? 'Uploading...' : `Upload ${type}`}
-      </Button>
+      <div className="flex gap-2">
+        <Button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+          variant="outline"
+          className="border-white/20 text-white hover:bg-white/10"
+        >
+          {type === 'image' ? <Image className="mr-2 h-4 w-4" /> : <Video className="mr-2 h-4 w-4" />}
+          {uploading ? 'Uploading...' : `Upload ${type}`}
+        </Button>
+
+        {currentUrl && onRemove && (
+          <Button
+            type="button"
+            onClick={onRemove}
+            variant="outline"
+            className="border-red-500/50 text-red-400 hover:bg-red-500/20 hover:border-red-500"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
 
       {currentUrl && (
         <p className="text-white/60 text-sm">

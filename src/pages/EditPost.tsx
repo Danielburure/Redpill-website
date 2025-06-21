@@ -137,6 +137,7 @@ const EditPost = () => {
                   <FileUpload
                     type="image"
                     onUpload={setImageUrl}
+                    onRemove={() => setImageUrl('')}
                     currentUrl={imageUrl}
                   />
                   <div className="text-center text-white/60">OR</div>
@@ -158,6 +159,7 @@ const EditPost = () => {
                   <FileUpload
                     type="video"
                     onUpload={setVideoUrl}
+                    onRemove={() => setVideoUrl('')}
                     currentUrl={videoUrl}
                   />
                   <div className="text-center text-white/60">OR</div>
