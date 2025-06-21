@@ -29,12 +29,18 @@ const FileUpload: React.FC<FileUploadProps> = ({ type, onUpload, onRemove, curre
   };
 
   const handleRemove = () => {
-    if (onRemove) {
-      onRemove();
-    }
+    console.log('Remove button clicked, currentUrl:', currentUrl);
+    
     // Clear the file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+      console.log('File input cleared');
+    }
+    
+    // Call the onRemove callback to clear the URL state
+    if (onRemove) {
+      onRemove();
+      console.log('onRemove callback called');
     }
   };
 
@@ -64,7 +70,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ type, onUpload, onRemove, curre
           {uploading ? 'Uploading...' : `Upload ${type}`}
         </Button>
 
-        {currentUrl && onRemove && (
+        {currentUrl && (
           <Button
             type="button"
             onClick={handleRemove}
