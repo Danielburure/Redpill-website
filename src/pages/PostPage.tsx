@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -44,10 +43,12 @@ const PostPage = () => {
         const postWithReactions: BlogPost = {
           id: postData.id,
           title: postData.title,
+          subheading: postData.subheading,
           content: postData.content,
           videoUrl: postData.video_url,
           imageUrl: postData.image_url,
           timestamp: postData.created_at,
+          pinned: postData.pinned || false,
           reactions
         };
 
@@ -168,9 +169,16 @@ const PostPage = () => {
           <CardContent className="p-8">
             {/* Title and Share Button */}
             <div className="flex justify-between items-start mb-4">
-              <h1 className="text-4xl md:text-5xl font-bold text-white bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent flex-1 mr-4">
-                {post.title}
-              </h1>
+              <div className="flex-1 mr-4">
+                <h1 className="text-4xl md:text-5xl font-bold text-white bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+                  {post.title}
+                </h1>
+                {post.subheading && (
+                  <p className="text-2xl text-white/80 mt-2">
+                    {post.subheading}
+                  </p>
+                )}
+              </div>
               <ShareButton postId={post.id} postTitle={post.title} />
             </div>
 
