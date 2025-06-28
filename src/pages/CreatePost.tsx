@@ -12,6 +12,7 @@ import FileUpload from '../components/FileUpload';
 
 const CreatePost = () => {
   const [title, setTitle] = useState('');
+  const [subheading, setSubheading] = useState('');
   const [content, setContent] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -31,6 +32,7 @@ const CreatePost = () => {
     try {
       await addPost({
         title: title.trim(),
+        subheading: subheading.trim() || undefined,
         content: content.trim(),
         videoUrl: videoUrl.trim() || undefined,
         imageUrl: imageUrl.trim() || undefined
@@ -80,6 +82,19 @@ const CreatePost = () => {
                   placeholder="Enter post title..."
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
                   required
+                />
+              </div>
+
+              {/* Subheading */}
+              <div>
+                <label className="block text-white text-sm font-medium mb-2">
+                  Subheading (Optional)
+                </label>
+                <Input
+                  value={subheading}
+                  onChange={(e) => setSubheading(e.target.value)}
+                  placeholder="Enter post subheading..."
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20"
                 />
               </div>
 

@@ -75,7 +75,8 @@ const FileUpload: React.FC<FileUploadProps> = ({ type, onUpload, onRemove, curre
             type="button"
             onClick={handleRemove}
             variant="outline"
-            className="border-red-500/50 text-red-400 hover:bg-red-500/20 hover:border-red-500"
+            size="sm"
+            className="border-red-500/50 text-red-400 hover:bg-red-500/20 hover:border-red-500 px-2"
           >
             <X className="h-4 w-4" />
           </Button>

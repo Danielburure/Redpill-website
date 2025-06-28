@@ -1,14 +1,15 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface BlogPost {
   id: string;
   title: string;
+  subheading?: string;
   content: string;
   videoUrl?: string;
   imageUrl?: string;
   timestamp: string;
+  pinned: boolean;
   reactions: { [emoji: string]: number };
 }
 
@@ -17,10 +18,11 @@ export const useBlogPosts = () => {
 
   const fetchPosts = async () => {
     try {
-      // Fetch posts
+      // Fetch posts ordered by pinned status first, then by date
       const { data: postsData, error: postsError } = await supabase
         .from('blog_posts')
         .select('*')
+        .order('pinned', { ascending: false })
         .order('created_at', { ascending: false });
 
       if (postsError) throw postsError;
@@ -44,10 +46,12 @@ export const useBlogPosts = () => {
         return {
           id: post.id,
           title: post.title,
+          subheading: post.subheading,
           content: post.content,
           videoUrl: post.video_url,
           imageUrl: post.image_url,
           timestamp: post.created_at,
+          pinned: post.pinned || false,
           reactions
         };
       });
@@ -62,15 +66,17 @@ export const useBlogPosts = () => {
     fetchPosts();
   }, []);
 
-  const addPost = async (post: Omit<BlogPost, 'id' | 'timestamp' | 'reactions'>) => {
+  const addPost = async (post: Omit<BlogPost, 'id' | 'timestamp' | 'reactions' | 'pinned'>) => {
     try {
       const { error } = await supabase
         .from('blog_posts')
         .insert({
           title: post.title,
+          subheading: post.subheading,
           content: post.content,
           video_url: post.videoUrl,
-          image_url: post.imageUrl
+          image_url: post.imageUrl,
+          pinned: false
         });
 
       if (error) throw error;
@@ -86,9 +92,11 @@ export const useBlogPosts = () => {
         .from('blog_posts')
         .update({
           title: updates.title,
+          subheading: updates.subheading,
           content: updates.content,
           video_url: updates.videoUrl,
           image_url: updates.imageUrl,
+          pinned: updates.pinned,
           updated_at: new Date().toISOString()
         })
         .eq('id', id);
@@ -97,6 +105,23 @@ export const useBlogPosts = () => {
       await fetchPosts();
     } catch (error) {
       console.error('Error updating post:', error);
+    }
+  };
+
+  const togglePin = async (id: string) => {
+    try {
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+
+      const { error } = await supabase
+        .from('blog_posts')
+        .update({ pinned: !post.pinned })
+        .eq('id', id);
+
+      if (error) throw error;
+      await fetchPosts();
+    } catch (error) {
+      console.error('Error toggling pin:', error);
     }
   };
 
@@ -156,6 +181,7 @@ export const useBlogPosts = () => {
     addPost,
     updatePost,
     deletePost,
-    addReaction
+    addReaction,
+    togglePin
   };
 };

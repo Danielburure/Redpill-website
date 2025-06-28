@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useComments } from '../hooks/useComments';
-import { MessageCircle, Send } from "lucide-react";
+import { MessageCircle, Send, AlertTriangle } from "lucide-react";
 
 const CommentSection = () => {
   const { comments, addComment } = useComments();
@@ -41,6 +41,21 @@ const CommentSection = () => {
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-12">
+      {/* Important Note */}
+      <Card className="bg-gradient-to-r from-orange-500/10 to-red-500/10 backdrop-blur-lg border-orange-500/30 mb-6 dark:bg-gradient-to-r dark:from-orange-400/10 dark:to-red-400/10 dark:border-orange-400/30">
+        <CardContent className="p-4">
+          <div className="flex items-start">
+            <AlertTriangle className="h-5 w-5 text-orange-400 mr-3 mt-0.5 flex-shrink-0" />
+            <div>
+              <h4 className="text-orange-300 font-semibold mb-2 dark:text-orange-200">NB: Important Notice</h4>
+              <p className="text-orange-100 text-sm leading-relaxed dark:text-orange-100">
+                Don't use any AI chatbot like ChatGPT to try to confirm anything because they will flag it as propaganda, reason being it is programmed to continue deceiving you just like any other mainstream media.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card className="bg-white/5 backdrop-blur-lg border-4 border-double border-gradient-to-r from-cyan-400 via-purple-500 to-pink-400 shadow-2xl dark:bg-gray-900/20 dark:border-gradient-to-r dark:from-cyan-300 dark:via-purple-400 dark:to-pink-300" 
             style={{
               borderImage: 'linear-gradient(45deg, #22d3ee, #a855f7, #ec4899) 1',

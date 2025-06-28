@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { BlogPost } from '../hooks/useBlogPosts';
-import { Heart } from "lucide-react";
+import { Heart, Pin } from "lucide-react";
 import ShareButton from './ShareButton';
 
 interface PostCardProps {
@@ -32,6 +32,14 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
   return (
     <Card className="bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-2xl group dark:bg-gray-800/10 dark:border-gray-700/20 dark:hover:bg-gray-700/20 w-full mb-6">
       <CardContent className="p-6">
+        {/* Pin Indicator */}
+        {post.pinned && (
+          <div className="flex items-center mb-2">
+            <Pin className="w-4 h-4 text-yellow-400 mr-2" />
+            <span className="text-yellow-400 text-sm font-semibold">Pinned Post</span>
+          </div>
+        )}
+
         {/* Image Display */}
         {post.imageUrl && (
           <div className="relative mb-4 overflow-hidden rounded-lg">
@@ -65,9 +73,16 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
 
         {/* Header with Title and Share Button */}
         <div className="flex justify-between items-start mb-2">
-          <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors dark:text-gray-100 dark:group-hover:text-yellow-300 flex-1 mr-2">
-            {post.title}
-          </h3>
+          <div className="flex-1 mr-2">
+            <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors dark:text-gray-100 dark:group-hover:text-yellow-300">
+              {post.title}
+            </h3>
+            {post.subheading && (
+              <p className="text-lg text-white/80 mt-1 dark:text-gray-300">
+                {post.subheading}
+              </p>
+            )}
+          </div>
           <ShareButton postId={post.id} postTitle={post.title} />
         </div>
 
