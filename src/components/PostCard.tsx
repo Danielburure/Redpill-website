@@ -4,8 +4,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { BlogPost } from '../hooks/useBlogPosts';
-import { Heart, Pin } from "lucide-react";
+import { Heart, Pin, PinOff } from "lucide-react";
 import ShareButton from './ShareButton';
+import { useBlogPosts } from '../hooks/useBlogPosts';
+import { toast } from 'sonner';
 
 interface PostCardProps {
   post: BlogPost;
@@ -14,6 +16,7 @@ interface PostCardProps {
 
 const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
   const [showReactions, setShowReactions] = useState(false);
+  const { posts, togglePin } = useBlogPosts();
 
   const formatDate = (timestamp: string) => {
     return new Date(timestamp).toLocaleDateString('en-US', {
@@ -25,6 +28,18 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
 
   const truncateContent = (content: string, maxLength: number = 150) => {
     return content.length > maxLength ? content.substring(0, maxLength) + '...' : content;
+  };
+
+  const handleTogglePin = async () => {
+    const pinnedCount = posts.filter(p => p.pinned).length;
+    
+    if (!post.pinned && pinnedCount >= 5) {
+      toast.error('Maximum of 5 posts can be pinned at once');
+      return;
+    }
+    
+    await togglePin(post.id);
+    toast.success(post.pinned ? 'Post unpinned' : 'Post pinned');
   };
 
   const emojis = ['❤️', '😢', '😮'];
@@ -71,7 +86,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
           </div>
         )}
 
-        {/* Header with Title and Share Button */}
+        {/* Header with Title, Pin Button and Share Button */}
         <div className="flex justify-between items-start mb-2">
           <div className="flex-1 mr-2">
             <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors dark:text-gray-100 dark:group-hover:text-yellow-300">
@@ -83,7 +98,21 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
               </p>
             )}
           </div>
-          <ShareButton postId={post.id} postTitle={post.title} />
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleTogglePin}
+              variant="ghost"
+              size="sm"
+              className="text-white/60 hover:text-white hover:bg-white/10 dark:text-gray-400 dark:hover:text-gray-100 dark:hover:bg-gray-700/20"
+            >
+              {post.pinned ? (
+                <PinOff className="w-4 h-4" />
+              ) : (
+                <Pin className="w-4 h-4" />
+              )}
+            </Button>
+            <ShareButton postId={post.id} postTitle={post.title} />
+          </div>
         </div>
 
         {/* Date */}

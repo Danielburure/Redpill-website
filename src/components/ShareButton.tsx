@@ -18,7 +18,12 @@ interface ShareButtonProps {
 const ShareButton: React.FC<ShareButtonProps> = ({ postId, postTitle }) => {
   const [copied, setCopied] = useState(false);
   
-  const postUrl = `${window.location.origin}/post/${postId}`;
+  // Use asahd domain instead of lovable
+  const asahdDomain = window.location.hostname.includes('localhost') 
+    ? window.location.origin 
+    : 'https://asahd.com';
+  
+  const postUrl = `${asahdDomain}/post/${postId}`;
   const encodedTitle = encodeURIComponent(postTitle);
   const encodedUrl = encodeURIComponent(postUrl);
 
@@ -29,7 +34,16 @@ const ShareButton: React.FC<ShareButtonProps> = ({ postId, postTitle }) => {
       toast.success("Link copied to clipboard!");
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      toast.error("Failed to copy link");
+      // Fallback for browsers that don't support clipboard API
+      const textArea = document.createElement('textarea');
+      textArea.value = postUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopied(true);
+      toast.success("Link copied to clipboard!");
+      setTimeout(() => setCopied(false), 2000);
     }
   };
 
