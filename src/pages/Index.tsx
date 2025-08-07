@@ -50,7 +50,7 @@ const Index = () => {
         {/* Main Content - Centered */}
         <div className="flex flex-col items-center mt-16">
           {/* Website Title */}
-          <h1 className="text-6xl md:text-8xl font-bold text-accent mb-6 text-center drop-shadow-lg">
+          <h1 className="text-6xl md:text-8xl font-bold text-primary mb-6 text-center drop-shadow-lg">
             Redpill Asahd
           </h1>
           

@@ -7,19 +7,19 @@ const SocialFooter = () => {
       <div className="container mx-auto px-4">
         {/* Contact Me Section */}
         <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-white dark:text-gray-100 mb-6">Contact Me</h3>
+          <h3 className="text-2xl font-bold text-primary mb-6">Contact Me</h3>
           <div className="flex justify-center space-x-8">
             <a 
               href="https://x.com/itsDummy4" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-white hover:text-cyan-400 transition-colors"
+              className="text-accent hover:text-accent/80 transition-colors animate-glitter"
             >
               <div className="flex flex-col items-center space-y-2">
-                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                  <span className="text-xl">𝕏</span>
+                <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center hover:bg-accent/30 transition-colors animate-sparkle">
+                  <span className="text-xl text-accent">𝕏</span>
                 </div>
-                <span className="text-sm">x</span>
+                <span className="text-sm text-accent font-medium">X</span>
               </div>
             </a>
             
@@ -27,13 +27,13 @@ const SocialFooter = () => {
               href="https://instagram.com/khid_.asahd" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-white hover:text-pink-400 transition-colors"
+              className="text-accent hover:text-accent/80 transition-colors animate-glitter"
             >
               <div className="flex flex-col items-center space-y-2">
-                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                  <Instagram className="w-6 h-6" />
+                <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center hover:bg-accent/30 transition-colors animate-sparkle">
+                  <Instagram className="w-6 h-6 text-accent" />
                 </div>
-                <span className="text-sm">Instagram</span>
+                <span className="text-sm text-accent font-medium">Instagram</span>
               </div>
             </a>
             
@@ -41,13 +41,13 @@ const SocialFooter = () => {
               href="https://wa.me/254720485988" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-white hover:text-green-400 transition-colors"
+              className="text-accent hover:text-accent/80 transition-colors animate-glitter"
             >
               <div className="flex flex-col items-center space-y-2">
-                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                  <MessageCircle className="w-6 h-6" />
+                <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center hover:bg-accent/30 transition-colors animate-sparkle">
+                  <MessageCircle className="w-6 h-6 text-accent" />
                 </div>
-                <span className="text-sm">WhatsApp</span>
+                <span className="text-sm text-accent font-medium">WhatsApp</span>
               </div>
             </a>
             
@@ -55,13 +55,13 @@ const SocialFooter = () => {
               href="https://github.com/Danielburure" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-white hover:text-gray-400 transition-colors"
+              className="text-accent hover:text-accent/80 transition-colors animate-glitter"
             >
               <div className="flex flex-col items-center space-y-2">
-                <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
-                  <Github className="w-6 h-6" />
+                <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center hover:bg-accent/30 transition-colors animate-sparkle">
+                  <Github className="w-6 h-6 text-accent" />
                 </div>
-                <span className="text-sm">GitHub</span>
+                <span className="text-sm text-accent font-medium">GitHub</span>
               </div>
             </a>
           </div>
