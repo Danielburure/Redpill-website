@@ -23,11 +23,7 @@ const Index = () => {
   );
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      isDark 
-        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900' 
-        : 'bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-500'
-    }`}>
+    <div className="min-h-screen bg-background transition-colors duration-300">
       <div className="container mx-auto px-4 py-8">
         {/* Header with Theme Toggle and Admin Button */}
         <div className="flex justify-between items-center mb-8">
@@ -35,7 +31,7 @@ const Index = () => {
             onClick={toggleTheme}
             variant="ghost"
             size="sm"
-            className="text-white/60 hover:text-white hover:bg-white/10"
+            className="text-foreground/60 hover:text-primary"
           >
             {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </Button>
@@ -44,7 +40,7 @@ const Index = () => {
             <Button 
               variant="ghost" 
               size="sm"
-              className="text-white/60 hover:text-white hover:bg-white/10 text-xs"
+              className="text-foreground/60 hover:text-accent text-xs"
             >
               Admin
             </Button>
@@ -54,25 +50,25 @@ const Index = () => {
         {/* Main Content - Centered */}
         <div className="flex flex-col items-center mt-16">
           {/* Website Title */}
-          <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent text-center">
+          <h1 className="text-6xl md:text-8xl font-bold text-accent mb-6 text-center drop-shadow-lg">
             Redpill Asahd
           </h1>
           
           {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-4xl mx-auto text-center leading-relaxed dark:text-gray-200">
+          <p className="text-xl md:text-2xl text-foreground/90 mb-12 max-w-4xl mx-auto text-center leading-relaxed">
             Join me as I unveil the deceptions we have been conditioned to believe and awaken you to a new reality
           </p>
 
           {/* Search Bar */}
-          <Card className="mb-12 bg-white/10 backdrop-blur-lg border-white/20 w-full max-w-2xl dark:bg-gray-800/10 dark:border-gray-700/20">
+          <Card className="mb-12 bg-card border-primary/50 w-full max-w-2xl shadow-lg hover:shadow-xl transition-shadow">
             <CardContent className="p-6">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60 h-5 w-5 dark:text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary h-5 w-5" />
                 <Input
                   placeholder="Search posts..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/20 dark:bg-gray-700/20 dark:border-gray-600/20 dark:text-gray-100 dark:placeholder:text-gray-400"
+                  className="pl-10 bg-input border-primary/30 text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
                 />
               </div>
             </CardContent>
@@ -92,14 +88,14 @@ const Index = () => {
 
             {filteredPosts.length === 0 && (
               <div className="text-center py-16">
-                <p className="text-white/80 text-xl dark:text-gray-300">No posts found matching your search.</p>
+                <p className="text-foreground/80 text-xl">No posts found matching your search.</p>
               </div>
             )}
           </div>
 
           {/* Separator Line */}
           <div className="w-full max-w-4xl my-12">
-            <Separator className="bg-white/20 dark:bg-gray-700/20" />
+            <Separator className="bg-accent/30" />
           </div>
 
           {/* Comment Section - Bottom Left */}
