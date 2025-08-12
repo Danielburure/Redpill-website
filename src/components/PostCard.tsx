@@ -89,11 +89,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
         {/* Header with Title, Pin Button and Share Button */}
         <div className="flex justify-between items-start mb-2">
           <div className="flex-1 mr-2">
-            <h3 className="text-xl font-bold text-primary group-hover:text-primary/80 transition-colors">
+            <h3 className="text-xl font-bold text-white group-hover:text-yellow-300 transition-colors dark:text-gray-100 dark:group-hover:text-yellow-300">
               {post.title}
             </h3>
             {post.subheading && (
-              <p className="text-lg text-primary/80 mt-1">
+              <p className="text-lg text-white/80 mt-1 dark:text-gray-300">
                 {post.subheading}
               </p>
             )}
@@ -160,7 +160,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onReaction }) => {
 
         {/* Read More Button */}
         <Link to={`/post/${post.id}`}>
-          <Button variant="gold-glitter" className="w-full font-semibold">
+          <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white border-0">
             Read Full Post
           </Button>
         </Link>
